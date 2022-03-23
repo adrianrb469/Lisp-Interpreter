@@ -5,11 +5,11 @@ public class Interpreter {
 	Stack<String> stack;
 	HashMap<String, Double> myVars;
 	Arithmetic arithmetic;
-
+	Conditionals conditionals;
 	public Interpreter() {
 		stack = new Stack<String>();
 		myVars = new HashMap<>();
-
+		
 	}
 
 	public void parse(String[] tokens) {
@@ -27,6 +27,7 @@ public class Interpreter {
 		// This stack represents the current list with all the tokens to be evaluated
 		Stack<String> callStack = new Stack<String>();
 		arithmetic = new Arithmetic(myVars);
+		conditionals = new Conditionals(myVars);
 		tok = stack.pop(); /* This is the ) character */
 		// It loops backward until it finds a opening parenthesis
 		while (!(tok = stack.pop()).equals("(")) {
@@ -66,6 +67,15 @@ public class Interpreter {
 			break;
 		case "print":
 			System.out.println("Var: " + callStack.peek() + " Value: " + myVars.get(callStack.pop()));
+			break;
+		case ">":
+			stack.push(String.valueOf(conditionals.greaterThan(callStack)));
+			break;
+		case "<":
+			stack.push(String.valueOf(conditionals.lessThan(callStack)));
+			break;
+		case "=":
+			stack.push(String.valueOf(conditionals.equalTo(callStack)));
 			break;
 		default:
 			System.out.println("Error");

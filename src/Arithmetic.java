@@ -44,7 +44,7 @@ public class Arithmetic {
 			}
 		}
 
-		System.out.println("Answer is " + (res));
+		System.out.println("Answer is :" + (res));
 		return (res);
 	}
 

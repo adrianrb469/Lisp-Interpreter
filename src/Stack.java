@@ -42,5 +42,14 @@ public class Stack<T> implements IStack<T> {
 	public String toString() {
 		return coreList.toString();
 	}
+	
+	
+	public String[] toStringArray() {
+		String []res = new String[coreList.size()];
+		for (int n =0; n<coreList.size(); n ++) {
+			res[n] = (String) coreList.get(n);
+		}
+		return res;
+	}
 
 }

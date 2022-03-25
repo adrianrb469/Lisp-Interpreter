@@ -8,14 +8,29 @@ public class Lexer {
 	Lexer() {
 
 	}
-	
+
 	public String[] tokenize(String expression) {
 		String tokens[];
 		// Adds spaces if necessary before splitting
-		expression = expression.replaceAll("[(]", "( " ).replaceAll("[)]", " )");
+		expression = expression.replaceAll("[(]", "( ").replaceAll("[)]", " )").replaceAll("[\\[]", "[ ").replaceAll("[\\]]", " ]");
+		
 		// Split the lisp expression into tokens
-		tokens = expression.split("\s");
-		return tokens;
-	
+		tokens = expression.trim().split(" ");
+		
+		List<String> tokenList = new LinkedList<>(Arrays.asList(tokens));
+		ListIterator<String> iter = tokenList.listIterator();
+
+		// Removes unnecesary tokens from the token list
+		while(iter.hasNext()){
+		    if(iter.next().equals(" ")){
+		        iter.remove();
+		    }
+		}
+		//System.out.println(tokenList.toString());
+		String[] tks = new String[tokenList.size()];
+		tokenList.toArray(tks);
+		return tks;
+		
+
 	}
 }

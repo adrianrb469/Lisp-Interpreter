@@ -4,12 +4,19 @@ public class Interpreter {
 
 	Stack<String> stack;
 	HashMap<String, Double> myVars;
+	HashMap<String, Function> myFuncs = new HashMap<>();;
+	Stack<String> args = new Stack<>();
+	Stack<String> body = new Stack<>();
+	Lexer lexer;
 	Arithmetic arithmetic;
-	Conditionals conditionals;
+	Predicates predicate;
+
 	public Interpreter() {
 		stack = new Stack<String>();
 		myVars = new HashMap<>();
-		
+
+		lexer = new Lexer();
+
 	}
 
 	public void parse(String[] tokens) {
@@ -20,65 +27,148 @@ public class Interpreter {
 				interpret();
 
 		}
+		stack = new Stack<>();
 	}
 
 	public void interpret() {
 		String tok;
 		// This stack represents the current list with all the tokens to be evaluated
-		Stack<String> callStack = new Stack<String>();
+		Stack<String> evalStack = new Stack<String>();
 		arithmetic = new Arithmetic(myVars);
-		conditionals = new Conditionals(myVars);
-		tok = stack.pop(); /* This is the ) character */
-		// It loops backward until it finds a opening parenthesis
-		while (!(tok = stack.pop()).equals("(")) {
+		predicate = new Predicates(myVars);
+		tok = stack.pop();
+		System.out.println("Stack in main loop " + stack.toString());
+		// It loops backward until it finds an opening parenthesis
 
-			callStack.push(tok);
+		while (!(tok = stack.pop()).equals("(")) {
+			evalStack.push(tok);
 		}
-		call(callStack);
+		eval(evalStack);
 	}
 
-	public void call(Stack<String> callStack) {
-		String func = callStack.pop(); /* This is the operator or function */
+	public void eval(Stack<String> evalStack) {
+		System.out.println("evalStack " + evalStack);
+		String func = evalStack.pop();
 		switch (func) {
-		case "+":
-			stack.push(String.valueOf(arithmetic.add(callStack)));
-			break;
-		case "-":
-			stack.push(String.valueOf(arithmetic.subtract(callStack)));
-			break;
-		case "*":
-			stack.push(String.valueOf(arithmetic.multiply(callStack)));
-			break;
-		case "/":
-			stack.push(String.valueOf(arithmetic.divide(callStack)));
+		case "defun":
+			String funcName = evalStack.pop();
+
+			String tok;
+			while (!(tok = evalStack.peek()).equals("]")) {
+				if (tok.equals("[")) {
+					evalStack.pop();
+
+				} else {
+					args.push(evalStack.pop());
+
+				}
+			}
+			evalStack.pop();
+			while (!(evalStack.isEmpty())) {
+				body.push(evalStack.pop());
+			}
+			Function function = new Function();
+			function.setArgs(args);
+			function.setBody(body);
+			System.out.println("F in defun" + function.toString());
+			myFuncs.put(funcName, function);
 			break;
 		case "setq":
-
-			String var = callStack.pop();
-
-			if (Arithmetic.isNumeric(callStack.peek())) {
+			String var = evalStack.pop();
+			if (Arithmetic.isNumeric(evalStack.peek())) {
 				// This if is for assigning a variable to an existing variable
-				myVars.put(var, Double.parseDouble(callStack.pop()));
+				myVars.put(var, Double.parseDouble(evalStack.pop()));
 
 			} else {
-				myVars.put(var, myVars.get(callStack.pop()));
+				myVars.put(var, myVars.get(evalStack.pop()));
 			}
 
 			break;
 		case "print":
-			System.out.println("Var: " + callStack.peek() + " Value: " + myVars.get(callStack.pop()));
+			if (myVars.get(evalStack.peek()) == null) {
+				System.out.println(evalStack.pop());
+			} else {
+				System.out.println("Var: " + evalStack.peek() + " Value: " + myVars.get(evalStack.pop()));
+			}
+			break;
+		case "+":
+			stack.push(String.valueOf(arithmetic.add(evalStack)));
+			break;
+		case "-":
+			stack.push(String.valueOf(arithmetic.subtract(evalStack)));
+			break;
+		case "*":
+			stack.push(String.valueOf(arithmetic.multiply(evalStack)));
+			break;
+		case "/":
+			stack.push(String.valueOf(arithmetic.divide(evalStack)));
 			break;
 		case ">":
-			stack.push(String.valueOf(conditionals.greaterThan(callStack)));
+			stack.push(String.valueOf(predicate.greaterThan(evalStack)));
 			break;
 		case "<":
-			stack.push(String.valueOf(conditionals.lessThan(callStack)));
+			stack.push(String.valueOf(predicate.lessThan(evalStack)));
 			break;
 		case "=":
-			stack.push(String.valueOf(conditionals.equalTo(callStack)));
+			stack.push(String.valueOf(predicate.equalTo(evalStack)));
 			break;
 		default:
-			System.out.println("Error");
+			if (!(myFuncs.get(func) == null)) {
+
+				function = myFuncs.get(func);
+
+				System.out.println("f Before " + function.toString());
+
+				args = function.getArgs();
+
+				body = function.getBody();
+				Stack<String> bodyCopy = body;
+				String[] arrayArgs = new String[args.count()];
+				String[] arrayBody = new String[body.count()];
+				arrayArgs = args.toStringArray();
+				arrayBody = body.toStringArray();
+				int n = 0;
+				int j = 0;
+				while (!(evalStack.count() == 0)) {
+
+					myVars.put(arrayArgs[n], Double.parseDouble(evalStack.pop()));
+					n++;
+				}
+				System.out.println("f After " + function.toString());
+
+				Stack<String> expression = new Stack<>();
+				while (j < arrayBody.length) {
+					if (arrayBody[j].equals("[")) {
+						expression.push("(");
+
+					} else if (arrayBody[j].equals("]")) {
+						expression.push(")");
+
+					} else {
+						
+						expression.push(arrayBody[j]);
+					}
+					j++;
+
+				}
+
+				// function.setArgs(args);
+
+				// function.setBody(body);
+				System.out.println("f After " + function.toString());
+
+				System.out.println(expression);
+				parse(expression.toStringArray());
+				stack = new Stack<>();
+
+			} else if (!(myVars.get(func) == null)) {
+				stack.push(String.valueOf(myVars.get(func)));
+			} else if (arithmetic.isNumeric(func)) {
+				stack.push(func);
+			} else {
+				System.out.println("Error");
+			}
+
 			break;
 		}
 	}

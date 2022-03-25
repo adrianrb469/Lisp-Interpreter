@@ -10,69 +10,75 @@ public class Arithmetic {
 		myVars = vars;
 	}
 
-	public double add(Stack<String> callStack) {
+	public double add(Stack<String> evalStack) {
 		double res = 0;
-		System.out.println(callStack.toString());
+		
 		// This loops through all the elements from the call stack
-		while (!callStack.isEmpty()) {
-			if (isNumeric(callStack.peek())) {
+		while (!evalStack.isEmpty()) {
+			//System.out.println(evalStack.toString());
+			if (isNumeric(evalStack.peek())) {
 				// Adds the operand to the stack
-				operands.push(Double.parseDouble(callStack.pop()));
+				operands.push(Double.parseDouble(evalStack.pop()));
 				// Performs the operation
 				res += operands.pop();
 			}else {
-				operands.push(myVars.get(callStack.pop()));
+				operands.push(myVars.get(evalStack.pop()));
 				res += operands.pop();
 			}
 			
 		}
-
-		System.out.println("Answer is " + (res));
+		System.out.println("Result "+String.valueOf(res));
 		return (res);
 	}
 
-	public double subtract(Stack<String> callStack) {
+	public double subtract(Stack<String> evalStack) {
 		double res = 0;
-		System.out.println(callStack.toString());
-		while (!callStack.isEmpty()) {
-			if (isNumeric(callStack.peek())) {
-				operands.push(Double.parseDouble(callStack.pop()));
-				res -= operands.pop();
+		int n = 0;
+		while (!evalStack.isEmpty()) {
+			if (isNumeric(evalStack.peek())) {
+				operands.push(Double.parseDouble(evalStack.pop()));
+				if (n == 0) {
+					res = operands.pop();
+					n++;
+				} else {
+					res -= operands.pop();
+				}
 			}else {
-				operands.push(myVars.get(callStack.pop()));
-				res -= operands.pop();
+				operands.push(myVars.get(evalStack.pop()));
+				if (n == 0) {
+					res = operands.pop();
+					n++;
+				} else {
+					res -= operands.pop();
+				}
 			}
 		}
-
-		System.out.println("Answer is " + (res));
+		System.out.println("Result "+String.valueOf(res));
 		return (res);
 	}
 
-	public double multiply(Stack<String> callStack) {
+	public double multiply(Stack<String> evalStack) {
 		double res = 1;
-		System.out.println(callStack.toString());
-		while (!callStack.isEmpty()) {
-			if (isNumeric(callStack.peek())) {
-				operands.push(Double.parseDouble(callStack.pop()));
+		while (!evalStack.isEmpty()) {
+			if (isNumeric(evalStack.peek())) {
+				operands.push(Double.parseDouble(evalStack.pop()));
 				res *= operands.pop();
 			}else {
-				operands.push(myVars.get(callStack.pop()));
+				operands.push(myVars.get(evalStack.pop()));
 				res *= operands.pop();
 			}
 		}
-
-		System.out.println("Answer is " + (res));
+		System.out.println("Result "+String.valueOf(res));
 		return (res);
 	}
 
-	public double divide(Stack<String> callStack) {
+	public double divide(Stack<String> evalStack) {
 		double res = 1;
 		int n = 0;
-		System.out.println(callStack.toString());
-		while (!callStack.isEmpty()) {
+		while (!evalStack.isEmpty()) {
 			// Division is a special case were the initial value needs to be the first of
-			// the callStack
-			operands.push(Double.parseDouble(callStack.pop()));
+			// the evalStack
+			operands.push(Double.parseDouble(evalStack.pop()));
 			if (n == 0) {
 				res = operands.pop();
 				n++;
@@ -81,8 +87,7 @@ public class Arithmetic {
 			}
 
 		}
-
-		System.out.println("Answer is " + (res));
+		System.out.println("Result "+String.valueOf(res));
 		return (res);
 	}
 	
@@ -95,6 +100,7 @@ public class Arithmetic {
 	    } catch (NumberFormatException nfe) {
 	        return false;
 	    }
+	    
 	    return true;
 	}
 	

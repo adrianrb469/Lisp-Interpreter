@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+
 import java.util.Scanner;
 
 public class Main {
@@ -9,19 +9,17 @@ public class Main {
 	public static void main(String[] args) {
 
 		Scanner in = new Scanner(System.in);
-		String opt = "";
-		String[] tokens;
-		SyntaxScanner sc = new SyntaxScanner();
+		String line = "";
+		Lexer lexer = new Lexer();
 		Interpreter lisp = new Interpreter();
 		
 		do {
-			opt = in.nextLine();
-			
-			if (!opt.equals("exit")) {
-				lisp.parse(sc.tokenize(opt));
+			line = in.nextLine();
+			if (!line.equals("exit")) {
+				lisp.parse(lexer.tokenize(line));
 			}
 			
-		}while (!opt.equals("exit"));
+		}while (!line.equals("exit"));
 
 	}
 	

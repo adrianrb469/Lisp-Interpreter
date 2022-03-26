@@ -1,9 +1,9 @@
 import java.util.HashMap;
 
-public class Interpreter {
+public class Interpreter { //clase de interprete, hace la mayor parte del trabajo 
 
 	Stack<String> stack;
-	HashMap<String, Double> myVars;
+	HashMap<String, Double> myVars; // intancia de variables y constructores
 	HashMap<String, Function> myFuncs = new HashMap<>();;
 	Stack<String> args = new Stack<>();
 	Stack<String> body = new Stack<>();
@@ -11,7 +11,7 @@ public class Interpreter {
 	Arithmetic arithmetic;
 	Predicates predicate;
 
-	public Interpreter() {
+	public Interpreter() { // crea el stack, el hashmap y el constuctor de los tokens
 		stack = new Stack<String>();
 		myVars = new HashMap<>();
 		lexer = new Lexer();
@@ -19,7 +19,7 @@ public class Interpreter {
 	}
 
 	public void parse(String[] tokens) {
-		// Loops through the stack until it finds a closing parenthesis
+		// Busca los parentesis que cierran en el satck
 		for (int i = 0; i < tokens.length; i++) {
 			stack.push(tokens[i]);
 			if (tokens[i].equals(")"))
@@ -31,13 +31,12 @@ public class Interpreter {
 
 	public void interpret() {
 		String tok;
-		// This stack represents the current list with all the tokens to be evaluated
+		// Este es el stack con todos los tokens evaluados
 		Stack<String> evalStack = new Stack<String>();
 		arithmetic = new Arithmetic(myVars);
 		predicate = new Predicates(myVars);
 		tok = stack.pop();
-		// System.out.println("Stack in main loop " + stack.toString());
-		// It loops backward until it finds an opening parenthesis
+		// Este va en bucle reverso hasta que encuentra el parentesis que abre
 
 		while (!(tok = stack.pop()).equals("(")) {
 			evalStack.push(tok);
@@ -46,7 +45,7 @@ public class Interpreter {
 	}
 
 	public void eval(Stack<String> evalStack) {
-		// System.out.println("evalStack " + evalStack);
+		
 		String func = evalStack.pop();
 		switch (func) {
 		case "defun":
@@ -71,13 +70,13 @@ public class Interpreter {
 			myFuncs.put(funcName, new Function(args, body));
 			args = new Stack<>();
 			body = new Stack<>();
-			System.out.println("F in defun" + myFuncs.get(funcName).toString());
+			System.out.println("F in defun" + myFuncs.get(funcName).toString()); // nos devuelve el nombre de la funcion para ingresar datos 
 
 			break;
 		case "setq":
 			String var = evalStack.pop();
 			if (Arithmetic.isNumeric(evalStack.peek())) {
-				// This if is for assigning a variable to an existing variable
+				// Esta es para asignar a una variable otra ya existente 
 				myVars.put(var, Double.parseDouble(evalStack.pop()));
 
 			} else {

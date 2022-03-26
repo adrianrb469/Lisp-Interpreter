@@ -13,13 +13,13 @@ public class Arithmetic {
 	public double add(Stack<String> evalStack) {
 		double res = 0;
 		
-		// This loops through all the elements from the call stack
+		// Este hace bucle con todos los elementos del Stack
 		while (!evalStack.isEmpty()) {
-			//System.out.println(evalStack.toString());
+			
 			if (isNumeric(evalStack.peek())) {
-				// Adds the operand to the stack
+				// agrega el operando al stackq
 				operands.push(Double.parseDouble(evalStack.pop()));
-				// Performs the operation
+				// Hace la operacion 
 				res += operands.pop();
 			}else {
 				operands.push(myVars.get(evalStack.pop()));
@@ -27,19 +27,19 @@ public class Arithmetic {
 			}
 			
 		}
-		System.out.println("Result "+String.valueOf(res));
+		System.out.println("Result "+String.valueOf(res)); // Imprime los resultados 
 		return (res);
 	}
 
 	public double subtract(Stack<String> evalStack) {
 		double res = 0;
 		int n = 0;
-		while (!evalStack.isEmpty()) {
+		while (!evalStack.isEmpty()) {// Este hace bucle con todos los elementos del Stack
 			if (isNumeric(evalStack.peek())) {
 				operands.push(Double.parseDouble(evalStack.pop()));
-				if (n == 0) {
+				if (n == 0) { //agrega los operandos al stack
 					res = operands.pop();
-					n++;
+					n++; // hace la operacion
 				} else {
 					res -= operands.pop();
 				}
@@ -57,33 +57,33 @@ public class Arithmetic {
 		System.out.println("Result "+String.valueOf(res));
 
 
-		System.out.println("Answer is :" + (res));
+		System.out.println("Answer is :" + (res)); //imprime resultados 
 
 		return (res);
 	}
 
 	public double multiply(Stack<String> evalStack) {
 		double res = 1;
-		while (!evalStack.isEmpty()) {
+		while (!evalStack.isEmpty()) { // el bucle patra el stack 
 			if (isNumeric(evalStack.peek())) {
-				operands.push(Double.parseDouble(evalStack.pop()));
-				res *= operands.pop();
+				operands.push(Double.parseDouble(evalStack.pop())); // agrega los operandos 
+				res *= operands.pop(); // hace la operacion 
 			}else {
 				operands.push(myVars.get(evalStack.pop()));
 				res *= operands.pop();
 			}
 		}
-		System.out.println("Result "+String.valueOf(res));
+		System.out.println("Result "+String.valueOf(res)); // imprime los resultados 
 		return (res);
 	}
 
 	public double divide(Stack<String> evalStack) {
 		double res = 1;
 		int n = 0;
-		while (!evalStack.isEmpty()) {
+		while (!evalStack.isEmpty()) { // el bucle patra el stack 
 			if (isNumeric(evalStack.peek())) {
-				operands.push(Double.parseDouble(evalStack.pop()));
-				if (n == 0) {
+				operands.push(Double.parseDouble(evalStack.pop()));// agrega los operandos 
+				if (n == 0) {// hace la operacion 
 					res = operands.pop();
 					n++;
 				} else {
@@ -99,11 +99,11 @@ public class Arithmetic {
 				}
 			}
 		}
-		System.out.println("Result "+String.valueOf(res));
+		System.out.println("Result "+String.valueOf(res)); //imprime los resultados 
 		return (res);
 	}
 	
-	public static boolean isNumeric(String strNum) {
+	public static boolean isNumeric(String strNum) { // revisa si es un numero lo que estará evaluando
 	    if (strNum == null) {
 	        return false;
 	    }

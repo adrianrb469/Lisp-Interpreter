@@ -1,2 +1,2 @@
 # Lisp-Interpreter
-Lisp interpreter using Java and regex
+Lisp interpreter using Java

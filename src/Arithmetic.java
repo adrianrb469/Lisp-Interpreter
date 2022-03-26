@@ -76,16 +76,23 @@ public class Arithmetic {
 		double res = 1;
 		int n = 0;
 		while (!evalStack.isEmpty()) {
-			// Division is a special case were the initial value needs to be the first of
-			// the evalStack
-			operands.push(Double.parseDouble(evalStack.pop()));
-			if (n == 0) {
-				res = operands.pop();
-				n++;
-			} else {
-				res /= operands.pop();
+			if (isNumeric(evalStack.peek())) {
+				operands.push(Double.parseDouble(evalStack.pop()));
+				if (n == 0) {
+					res = operands.pop();
+					n++;
+				} else {
+					res /= operands.pop();
+				}
+			}else {
+				operands.push(myVars.get(evalStack.pop()));
+				if (n == 0) {
+					res = operands.pop();
+					n++;
+				} else {
+					res /= operands.pop();
+				}
 			}
-
 		}
 		System.out.println("Result "+String.valueOf(res));
 		return (res);

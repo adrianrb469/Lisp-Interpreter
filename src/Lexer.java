@@ -19,12 +19,15 @@ public class Lexer {
 		
 		List<String> tokenList = new LinkedList<>(Arrays.asList(tokens));
 		ListIterator<String> iter = tokenList.listIterator();
-
+		
+		Stack<String> tokenStack = new Stack<>();
+		
 		// Removes unnecesary tokens from the token list
 		while(iter.hasNext()){
 		    if(iter.next().equals(" ")){
 		        iter.remove();
 		    }
+		
 		}
 		//System.out.println(tokenList.toString());
 		String[] tks = new String[tokenList.size()];

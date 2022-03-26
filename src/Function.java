@@ -7,7 +7,10 @@ public class Function {
 	public Function() {
 
 	}
-
+	public Function(Stack<String> args, Stack<String> body) {
+		this.args = args;
+		this.body = body;
+	}
 	public Stack<String> getBody() {
 		return body;
 	}

@@ -53,7 +53,12 @@ public class Arithmetic {
 				}
 			}
 		}
+
 		System.out.println("Result "+String.valueOf(res));
+
+
+		System.out.println("Answer is :" + (res));
+
 		return (res);
 	}
 

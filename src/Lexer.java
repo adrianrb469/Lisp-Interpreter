@@ -3,7 +3,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class Lexer {
+public class Lexer { // nuestra clase principal para crear los tokens
 
 	Lexer() {
 

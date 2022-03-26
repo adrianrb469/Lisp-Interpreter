@@ -1,19 +1,19 @@
 import java.util.HashMap;
 
-public class Predicates {
+public class Predicates { // nuestra clase de condicionales 
 
 	Stack<Double> operands;
 	HashMap<String, Double> myVars;
 	Arithmetic arithmetic;
 	
-	public Predicates(HashMap<String, Double> vars) {
+	public Predicates(HashMap<String, Double> vars) { // instancia variables y crea constructores
 		operands = new Stack<>();
 		myVars = vars;
 		arithmetic = new Arithmetic(vars);
 	}
 
 	// x>y
-	public boolean greaterThan(Stack<String> evalStack) {
+	public boolean greaterThan(Stack<String> evalStack) { // evalua si la expresion es mayor que...
 		
 		double x;
 		double y;
@@ -42,7 +42,7 @@ public class Predicates {
 
 	}
 	// x<y
-	public boolean lessThan(Stack<String> evalStack) {
+	public boolean lessThan(Stack<String> evalStack) { // evalua si la expresion es menor que...
 
 		double x;
 		double y;
@@ -70,7 +70,7 @@ public class Predicates {
 
 	}
 	
-	public boolean equalTo(Stack<String> evalStack) {
+	public boolean equalTo(Stack<String> evalStack) { // evalua si la expresion es igual a...
 
 		double x;
 		double y;

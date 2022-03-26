@@ -1,5 +1,5 @@
 
-public interface IStack<T> {
+public interface IStack<T> { // interfaz del stack
 
 	void push(T value);
 	

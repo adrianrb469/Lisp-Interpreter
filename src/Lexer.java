@@ -32,6 +32,7 @@ public class Lexer {
 		//System.out.println(tokenList.toString());
 		String[] tks = new String[tokenList.size()];
 		tokenList.toArray(tks);
+		
 		return tks;
 		
 
